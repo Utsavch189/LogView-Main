@@ -1,0 +1,7 @@
+*.log
+*.db
+*.sqlite
+.git
+.env
+logview_data
+/logview_data

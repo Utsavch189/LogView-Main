@@ -1,0 +1,33 @@
+# Stage 1: Build the Go binary
+FROM golang:1.23-alpine AS builder
+
+# Install build dependencies
+RUN apk add --no-cache build-base sqlite-dev
+
+WORKDIR /app
+
+# Copy go module files and download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the source code
+COPY ./worker ./worker
+COPY ./internal ./internal
+
+# Set CGO_ENABLED=1 for SQLite support and build the binary
+ENV CGO_ENABLED=1
+RUN go build -o log-worker ./worker
+
+# Stage 2: Create a minimal runtime image
+FROM alpine:latest
+
+# Install runtime dependencies
+RUN apk add --no-cache sqlite-libs ca-certificates
+
+WORKDIR /app
+
+# Copy the binary from the builder stage
+COPY --from=builder /app/log-worker .
+
+# Command to run the executable
+CMD ["./log-worker"]
