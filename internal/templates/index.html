@@ -10,7 +10,10 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js@1.12.0/src/toastify.min.css">
   <script src="/static/js/utils.js"></script>
   <link rel="stylesheet" href="/static/css/style.css">
-<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <body class="bg-gray-100 min-h-screen">
   <div class="flex">
@@ -21,7 +24,7 @@
         <button onclick="openProjectModal()" class="text-blue-500 hover:text-blue-700">＋</button>
       </div>
       <ul id="projectList" class="space-y-2">
-        
+
       </ul>
     </div>
 
@@ -34,7 +37,7 @@
         <!-- Dates range -->
         <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
           <h2 class="text-xl font-semibold text-gray-800 mb-6">Select Date Range For Log Search :</h2>
-          
+
           <div class="space-y-4">
             <!-- Date Inputs Container -->
             <div class="grid grid-cols-2 gap-4">
@@ -44,31 +47,25 @@
                   From Date
                 </label>
                 <div class="relative">
-                  <input 
-                    type="date" 
-                    id="fromDate"
+                  <input type="date" id="fromDate"
                     class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
-                    onchange="validateDates()"
-                  />
+                    onchange="validateDates()" />
                 </div>
               </div>
-  
+
               <!-- To Date -->
               <div>
                 <label for="toDate" class="block text-sm font-medium text-gray-700 mb-1">
                   To Date
                 </label>
                 <div class="relative">
-                  <input 
-                    type="date" 
-                    id="toDate"
+                  <input type="date" id="toDate"
                     class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
-                    onchange="validateDates()"
-                  />
+                    onchange="validateDates()" />
                 </div>
               </div>
             </div>
-  
+
             <!-- Selected Range Display -->
             <div class="mt-6 p-4 bg-gray-50 rounded-lg">
               <p class="text-sm text-gray-600">Selected Range:</p>
@@ -78,8 +75,10 @@
             </div>
 
             <div class="flex mt-6 p-4 bg-gray-50 rounded-lg">
-              <button id="dateSearch" type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Search</button>
-              <button id="resetDateSearch" type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Reset</button>
+              <button id="dateSearch" type="button"
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Search</button>
+              <button id="resetDateSearch" type="button"
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Reset</button>
             </div>
 
           </div>
@@ -93,22 +92,27 @@
             <!-- Refresh Zone -->
             <div class="flex justify-between items-center mb-6">
               <div class="flex items-center gap-4">
+                <div>
+                  <i id="log-download-btn" data-tooltip-target="log-download" class="fa-solid fa-download cursor-pointer"></i>
+                  <div id="log-download" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
+                    Download Logs
+                    <div class="tooltip-arrow" data-popper-arrow></div>
+                  </div> 
+
+                </div>
                 <div class="flex items-center gap-2">
                   <label class="text-sm text-gray-600">Refresh (seconds):</label>
-                  <input 
-                    type="number" 
-                    id="refreshInterval" 
-                    value="10" 
-                    min="1" 
-                    class="w-16 px-2 py-1 border rounded text-sm"
-                    onchange="updateRefreshInterval(this.value)"
-                  >
+                  <input type="number" id="refreshInterval" value="10" min="1"
+                    class="w-16 px-2 py-1 border rounded text-sm" onchange="updateRefreshInterval(this.value)">
                 </div>
                 <div class="flex items-center gap-2">
                   <label class="text-sm text-gray-600">Auto-refresh:</label>
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="autoRefreshToggle" class="sr-only peer" checked onchange="toggleAutoRefresh()">
-                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                    <input type="checkbox" id="autoRefreshToggle" class="sr-only peer" checked
+                      onchange="toggleAutoRefresh()">
+                    <div
+                      class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                    </div>
                   </label>
                 </div>
                 <div class="flex items-center gap-2">
@@ -128,13 +132,14 @@
                     <p class="text-4xl font-bold mt-2" id="total_logs_count">0</p>
                   </div>
                   <div class="text-blue-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                   </div>
                 </div>
               </div>
-    
+
               <!-- Info Logs -->
               <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white shadow-md">
                 <div class="flex items-center justify-between">
@@ -143,7 +148,8 @@
                     <p class="text-3xl font-bold mt-2" id="info_logs_count">0</p>
                   </div>
                   <div class="text-green-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="16" x2="12" y2="12"></line>
                       <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -151,7 +157,7 @@
                   </div>
                 </div>
               </div>
-    
+
               <!-- Error Logs -->
               <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-6 text-white shadow-md">
                 <div class="flex items-center justify-between">
@@ -160,7 +166,8 @@
                     <p class="text-3xl font-bold mt-2" id="error_logs_count">0</p>
                   </div>
                   <div class="text-red-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <circle cx="12" cy="12" r="10"></circle>
                       <line x1="12" y1="8" x2="12" y2="12"></line>
                       <line x1="12" y1="16" x2="12.01" y2="16"></line>
@@ -168,7 +175,7 @@
                   </div>
                 </div>
               </div>
-    
+
               <!-- Warning Logs -->
               <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-6 text-white shadow-md">
                 <div class="flex items-center justify-between">
@@ -177,15 +184,18 @@
                     <p class="text-3xl font-bold mt-2" id="warn_logs_count">0</p>
                   </div>
                   <div class="text-yellow-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                      </path>
                       <line x1="12" y1="9" x2="12" y2="13"></line>
                       <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
                   </div>
                 </div>
               </div>
-    
+
               <!-- Debug Logs -->
               <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-md">
                 <div class="flex items-center justify-between">
@@ -194,7 +204,8 @@
                     <p class="text-3xl font-bold mt-2" id="debug_logs_count">0</p>
                   </div>
                   <div class="text-purple-200">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                     </svg>
                   </div>
@@ -228,16 +239,14 @@
           <div class="flex items-center ps-3">
             <input id="error-check" type="checkbox" value=""
               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 focus:ring-2 loglevel_checks">
-            <label for="error-check"
-              class="w-full py-3 ms-2 text-sm font-medium text-red-700">ERROR</label>
+            <label for="error-check" class="w-full py-3 ms-2 text-sm font-medium text-red-700">ERROR</label>
           </div>
         </li>
         <li class="w-full">
           <div class="flex items-center ps-3">
             <input id="debug-check" type="checkbox" value=""
               class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 focus:ring-2 loglevel_checks">
-            <label for="debug-check"
-              class="w-full py-3 ms-2 text-sm font-medium text-gray-900">DEBUG</label>
+            <label for="debug-check" class="w-full py-3 ms-2 text-sm font-medium text-gray-900">DEBUG</label>
           </div>
         </li>
       </ul>
@@ -297,6 +306,7 @@
 
   <script src="/static/js/main.js"></script>
   <script src="/static/js/auto_refresh.js"></script>
+  
 </body>
 
 </html>

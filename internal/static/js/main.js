@@ -55,7 +55,7 @@ async function getLogs(project_name = "") {
         })
         const data = await res.json();
         console.log(data)
-        renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count , data?.debug_count);
+        renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count);
     } catch (error) {
         console.log(error)
         window.Utils.showToast("Something is wrong!", "error")
@@ -100,7 +100,7 @@ async function getProjects() {
     }
 }
 
-function renderLogs(logs, total_logs,info_count, warn_count,error_count, debug_count) {
+function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug_count) {
     const container = document.getElementById("logContainer");
     container.innerHTML = '';
 
@@ -247,34 +247,34 @@ function validateDates() {
     const selectedRange = document.getElementById('selectedRange');
 
     if (fromDate.value && toDate.value) {
-      const from = new Date(fromDate.value);
-      const to = new Date(toDate.value);
+        const from = new Date(fromDate.value);
+        const to = new Date(toDate.value);
 
-      if (from > to) {
-        toDate.value = fromDate.value;
-      }
+        if (from > to) {
+            toDate.value = fromDate.value;
+        }
 
-      // Format dates for display
-      const formatDate = (date) => {
-        return new Intl.DateTimeFormat('en-US', {
-          weekday: 'short',
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
-        }).format(date);
-      };
+        // Format dates for display
+        const formatDate = (date) => {
+            return new Intl.DateTimeFormat('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            }).format(date);
+        };
 
-      selectedRange.textContent = `${formatDate(from)} - ${formatDate(to)}`;
+        selectedRange.textContent = `${formatDate(from)} - ${formatDate(to)}`;
     } else {
-      selectedRange.textContent = 'No dates selected';
+        selectedRange.textContent = 'No dates selected';
     }
-  }
+}
 
-document.getElementById("dateSearch").addEventListener("click",async(e)=>{
+document.getElementById("dateSearch").addEventListener("click", async (e) => {
     const fromDate = document.getElementById('fromDate').value;
     const toDate = document.getElementById('toDate').value;
 
-    if (!fromDate || !toDate){
+    if (!fromDate || !toDate) {
         window.Utils.showToast("Provide Date Ranges!", "error");
         return;
     }
@@ -283,7 +283,7 @@ document.getElementById("dateSearch").addEventListener("click",async(e)=>{
     await getLogs();
 })
 
-document.getElementById("resetDateSearch").addEventListener("click",async(e)=>{
+document.getElementById("resetDateSearch").addEventListener("click", async (e) => {
     document.getElementById('fromDate').value = "";
     document.getElementById('toDate').value = "";
 
@@ -292,6 +292,33 @@ document.getElementById("resetDateSearch").addEventListener("click",async(e)=>{
     await getLogs();
 })
 
+
+document.getElementById("log-download-btn").addEventListener("click", async (e) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    project_name = urlParams.get('project');
+
+    if (!project_name) {
+        window.Utils.showToast(`No project is selected!`, "error");
+        return;
+    }
+
+    const response = await fetch(`/api/logs/${project_name}/download-logs`, {
+        method: "POST",
+        body: JSON.stringify({
+            "loglevels": checkcked_log_levels,
+            "dates": dates
+        })
+    })
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "logs.xlsx";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+})
 
 document.addEventListener("DOMContentLoaded", async () => {
     set_checking_loglevels();

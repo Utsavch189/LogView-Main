@@ -14,4 +14,7 @@ func LogIngestHandler(r *mux.Router) {
 
 	r.HandleFunc("/api/logs/{project}/apply-filters/get-all", service.GetAllLogsWithFilters).
 		Methods("POST")
+
+	r.HandleFunc("/api/logs/{project}/download-logs", service.DownloadLogs).
+		Methods("POST")
 }

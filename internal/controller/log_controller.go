@@ -194,3 +194,59 @@ func GetFilteredLogs(sql string, sqlCount string, sqlInfoLogCount string, sqlWar
 
 	return logs, totalCount, totalInfoCount, totalWarningCount, totalErrorCount, totalDebugCount, nil
 }
+
+func GetLogsForDownload(sql string) ([]request.LogEntry, error) {
+
+	db, err := configs.Connect()
+
+	var logs []request.LogEntry
+
+	if err != nil {
+		return logs, err
+	}
+
+	rows, err := db.Query(sql)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var log request.LogEntry
+		var createdAt string
+
+		err := rows.Scan(
+			&log.ID,
+			&log.Time,
+			&log.Level,
+			&log.Logger,
+			&log.Message,
+			&log.Hostname,
+			&log.SourceToken,
+			&log.Pathname,
+			&log.Filename,
+			&log.FuncName,
+			&log.Lineno,
+			&log.Thread,
+			&log.Process,
+			&log.Module,
+			&log.Created,
+			&log.Exception,
+			&createdAt,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		log.CreatedAt, _ = time.Parse(time.RFC3339, createdAt)
+
+		logs = append(logs, log)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return logs, nil
+}

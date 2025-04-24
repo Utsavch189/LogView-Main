@@ -139,3 +139,48 @@ func GetAllLogsWithFilters(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&response)
 }
+
+func DownloadLogs(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var logFilterSearch request.LogFilterSearch
+
+	err := json.NewDecoder(r.Body).Decode(&logFilterSearch)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(response.ErrorResponse(err, "wrong payload!"))
+		return
+	}
+
+	params := mux.Vars(r)
+	project := params["project"]
+
+	_project, perr := controller.GetProjectByName(project)
+
+	if perr != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(response.ErrorResponse(perr, "logs fetching failed!"))
+		return
+	}
+
+	sql := utils.GenerateSqlQueryForLogDownload(logFilterSearch, *_project)
+
+	logs, lerr := controller.GetLogsForDownload(sql)
+
+	if lerr != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(response.ErrorResponse(lerr, "logs fetching failed!"))
+		return
+	}
+
+	f := utils.GenerateXlLogs(logs)
+
+	w.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+	w.Header().Set("Content-Disposition", "attachment; filename=logs.xlsx")
+	w.Header().Set("File-Name", "logs.xlsx")
+	w.Header().Set("Access-Control-Expose-Headers", "File-Name")
+
+	if err := f.Write(w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
