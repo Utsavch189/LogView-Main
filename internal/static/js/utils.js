@@ -1,7 +1,7 @@
 (
     function () {
 
-        function showToast(message, type = "info", width = "300px", duration = 2000, gravity = "top", position = "left") {
+        function showToast(message, type = "info", width = "300px", duration = 2000, gravity = "top", position = "right") {
             const typeIcons = {
                 success: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>`,
                 error: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="18" height="18"><circle cx="12" cy="12" r="10" stroke="white" stroke-width="2" fill="#f44336"/><line x1="12" y1="8" x2="12" y2="13" stroke="white" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16" r="1" fill="white"/></svg>`,
