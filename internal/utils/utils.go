@@ -10,7 +10,7 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-func GenerateSqlQueryForFilterSearch(filter request.LogFilterSearch, project request.ProjectEntry, page int, pageSize int) (string, string, string, string, string, string) {
+func GenerateSqlQueryForFilterSearch(filter request.LogFilterSearch, project request.ProjectEntry, page int, pageSize int) (string, string, string, string, string, string, string) {
 
 	activeLevels := []string{}
 
@@ -29,12 +29,14 @@ func GenerateSqlQueryForFilterSearch(filter request.LogFilterSearch, project req
 	var sqlWarnLogCount string
 	var sqlErrorLogCount string
 	var sqlDebugLogCount string
+	var sqlPaginateCount string
 
 	sqlCount = fmt.Sprintf(`SELECT COUNT(*) FROM logs WHERE source_token = '%s'`, project.SourceToken)
 	sqlInfoLogCount = fmt.Sprintf(`SELECT COUNT(*) FROM logs WHERE LOWER(level) = '%s' AND source_token = '%s'`, "info", project.SourceToken)
 	sqlWarnLogCount = fmt.Sprintf(`SELECT COUNT(*) FROM logs WHERE LOWER(level) = '%s' AND source_token = '%s'`, "warning", project.SourceToken)
 	sqlErrorLogCount = fmt.Sprintf(`SELECT COUNT(*) FROM logs WHERE LOWER(level) = '%s' AND source_token = '%s'`, "error", project.SourceToken)
 	sqlDebugLogCount = fmt.Sprintf(`SELECT COUNT(*) FROM logs WHERE LOWER(level) = '%s' AND source_token = '%s'`, "debug", project.SourceToken)
+	sqlPaginateCount = fmt.Sprintf(`SELECT COUNT(*) FROM logs WHERE source_token = '%s' AND LOWER(level) IN (%s)`, project.SourceToken, levels)
 
 	sql := fmt.Sprintf(`SELECT id,
 		time, level, logger, message, hostname, source_token,
@@ -50,11 +52,12 @@ func GenerateSqlQueryForFilterSearch(filter request.LogFilterSearch, project req
 		sqlWarnLogCount += fmt.Sprintf(` AND created_at BETWEEN '%s' AND '%s'`, filter.LogDates.From.UTC().Format("2006-01-02 15:04:05"), endOfDay.Format("2006-01-02 15:04:05"))
 		sqlErrorLogCount += fmt.Sprintf(` AND created_at BETWEEN '%s' AND '%s'`, filter.LogDates.From.UTC().Format("2006-01-02 15:04:05"), endOfDay.Format("2006-01-02 15:04:05"))
 		sqlDebugLogCount += fmt.Sprintf(` AND created_at BETWEEN '%s' AND '%s'`, filter.LogDates.From.UTC().Format("2006-01-02 15:04:05"), endOfDay.Format("2006-01-02 15:04:05"))
+		sqlPaginateCount += fmt.Sprintf(` AND created_at BETWEEN '%s' AND '%s'`, filter.LogDates.From.UTC().Format("2006-01-02 15:04:05"), endOfDay.Format("2006-01-02 15:04:05"))
 	}
 
 	sql += fmt.Sprintf(` ORDER BY ID DESC LIMIT %d OFFSET %d`, pageSize, offset)
 
-	return sql, sqlCount, sqlInfoLogCount, sqlWarnLogCount, sqlErrorLogCount, sqlDebugLogCount
+	return sql, sqlCount, sqlInfoLogCount, sqlWarnLogCount, sqlErrorLogCount, sqlDebugLogCount, sqlPaginateCount
 }
 
 func GenerateSqlQueryForLogDownload(filter request.LogFilterSearch, project request.ProjectEntry) string {

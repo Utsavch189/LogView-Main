@@ -54,7 +54,7 @@ async function getLogs(project_name = "") {
             })
         })
         const data = await res.json();
-        renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count);
+        renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count,data?.paginate_count);
     } catch (error) {
         console.log(error)
         window.Utils.showToast("Something is wrong!", "error")
@@ -99,7 +99,7 @@ async function getProjects() {
     }
 }
 
-function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug_count) {
+function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug_count, paginate_count) {
     const container = document.getElementById("logContainer");
     container.innerHTML = '';
 
@@ -113,7 +113,7 @@ function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug
         return;
     }
 
-    const totalPages = Math.ceil(total_logs / itemsPerPage);
+    const totalPages = Math.ceil(paginate_count / itemsPerPage);
     currentPage = Math.min(currentPage, totalPages);
 
     container.innerHTML = logs.map(log => `
@@ -130,7 +130,7 @@ function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug
 
     document.getElementById("pageInfo").textContent = currentPage;
     document.getElementById("totalPages").textContent = totalPages;
-    document.getElementById("totalCount").textContent = total_logs;
+    document.getElementById("totalCount").textContent = paginate_count;
 
     document.getElementById("prevBtn").disabled = currentPage <= 1;
     document.getElementById("nextBtn").disabled = currentPage >= totalPages;

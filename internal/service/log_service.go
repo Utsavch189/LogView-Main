@@ -134,10 +134,10 @@ func GetAllLogsWithFilters(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sql, sqlCount, sqlInfoLogCount, sqlWarnLogCount, sqlErrorLogCount, sqlDebugLogCount := utils.GenerateSqlQueryForFilterSearch(logFilterSearch, *_project, page, pageSize)
+	sql, sqlCount, sqlInfoLogCount, sqlWarnLogCount, sqlErrorLogCount, sqlDebugLogCount, sqlPaginateCount := utils.GenerateSqlQueryForFilterSearch(logFilterSearch, *_project, page, pageSize)
 	// print(sql)
 
-	logs, count, infoCount, warnCount, errorCount, debugCount, err := controller.GetFilteredLogs(sql, sqlCount, sqlInfoLogCount, sqlWarnLogCount, sqlErrorLogCount, sqlDebugLogCount)
+	logs, count, infoCount, warnCount, errorCount, debugCount, paginateCount, err := controller.GetFilteredLogs(sql, sqlCount, sqlInfoLogCount, sqlWarnLogCount, sqlErrorLogCount, sqlDebugLogCount, sqlPaginateCount)
 
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -146,12 +146,13 @@ func GetAllLogsWithFilters(w http.ResponseWriter, r *http.Request) {
 	}
 
 	response := response.LogFilteredResponse{
-		Logs:       logs,
-		Count:      count,
-		InfoCount:  infoCount,
-		WarnCount:  warnCount,
-		ErrorCount: errorCount,
-		DebugCount: debugCount,
+		Logs:          logs,
+		Count:         count,
+		InfoCount:     infoCount,
+		WarnCount:     warnCount,
+		ErrorCount:    errorCount,
+		DebugCount:    debugCount,
+		PaginateCount: paginateCount,
 	}
 
 	w.WriteHeader(http.StatusOK)

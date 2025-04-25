@@ -109,19 +109,19 @@ func GetAllLogs(source_token string) ([]request.LogEntry, error) {
 	return logs, nil
 }
 
-func GetFilteredLogs(sql string, sqlCount string, sqlInfoLogCount string, sqlWarnLogCount string, sqlErrorLogCount string, sqlDebugLogCount string) ([]request.LogEntry, int, int, int, int, int, error) {
+func GetFilteredLogs(sql string, sqlCount string, sqlInfoLogCount string, sqlWarnLogCount string, sqlErrorLogCount string, sqlDebugLogCount string, sqlPaginateCount string) ([]request.LogEntry, int, int, int, int, int, int, error) {
 
 	db, err := configs.Connect()
 
 	var logs []request.LogEntry
 
 	if err != nil {
-		return logs, 0, 0, 0, 0, 0, err
+		return logs, 0, 0, 0, 0, 0, 0, err
 	}
 
 	rows, err := db.Query(sql)
 	if err != nil {
-		return nil, 0, 0, 0, 0, 0, err
+		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 	defer rows.Close()
 
@@ -150,7 +150,7 @@ func GetFilteredLogs(sql string, sqlCount string, sqlInfoLogCount string, sqlWar
 		)
 
 		if err != nil {
-			return nil, 0, 0, 0, 0, 0, err
+			return nil, 0, 0, 0, 0, 0, 0, err
 		}
 
 		log.CreatedAt, _ = time.Parse(time.RFC3339, createdAt)
@@ -159,40 +159,46 @@ func GetFilteredLogs(sql string, sqlCount string, sqlInfoLogCount string, sqlWar
 	}
 
 	if err = rows.Err(); err != nil {
-		return nil, 0, 0, 0, 0, 0, err
+		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
 	var totalCount int
 	err = db.QueryRow(sqlCount).Scan(&totalCount)
 	if err != nil {
-		return nil, 0, 0, 0, 0, 0, err
+		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
 	var totalInfoCount int
 	err = db.QueryRow(sqlInfoLogCount).Scan(&totalInfoCount)
 	if err != nil {
-		return nil, 0, 0, 0, 0, 0, err
+		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
 	var totalWarningCount int
 	err = db.QueryRow(sqlWarnLogCount).Scan(&totalWarningCount)
 	if err != nil {
-		return nil, 0, 0, 0, 0, 0, err
+		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
 	var totalErrorCount int
 	err = db.QueryRow(sqlErrorLogCount).Scan(&totalErrorCount)
 	if err != nil {
-		return nil, 0, 0, 0, 0, 0, err
+		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
 	var totalDebugCount int
 	err = db.QueryRow(sqlDebugLogCount).Scan(&totalDebugCount)
 	if err != nil {
-		return nil, 0, 0, 0, 0, 0, err
+		return nil, 0, 0, 0, 0, 0, 0, err
 	}
 
-	return logs, totalCount, totalInfoCount, totalWarningCount, totalErrorCount, totalDebugCount, nil
+	var totalPaginateCount int
+	err = db.QueryRow(sqlPaginateCount).Scan(&totalPaginateCount)
+	if err != nil {
+		return nil, 0, 0, 0, 0, 0, 0, err
+	}
+
+	return logs, totalCount, totalInfoCount, totalWarningCount, totalErrorCount, totalDebugCount, totalPaginateCount, nil
 }
 
 func GetLogsForDownload(sql string) ([]request.LogEntry, error) {
