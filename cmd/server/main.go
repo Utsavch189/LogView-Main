@@ -13,6 +13,12 @@ import (
 )
 
 func main() {
+
+	configs.InitRedisClient(
+		configs.GetEnv("REDIS_ADDR"),
+		"",
+		0,
+	)
 	db, err := configs.Connect()
 	if err != nil {
 		log.Fatalf("DB connect issue: %v", err)

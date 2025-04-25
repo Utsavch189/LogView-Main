@@ -54,7 +54,6 @@ async function getLogs(project_name = "") {
             })
         })
         const data = await res.json();
-        console.log(data)
         renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count);
     } catch (error) {
         console.log(error)
@@ -104,6 +103,12 @@ function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug
     const container = document.getElementById("logContainer");
     container.innerHTML = '';
 
+    document.getElementById("total_logs_count").innerText = total_logs;
+    document.getElementById("info_logs_count").innerText = info_count;
+    document.getElementById("error_logs_count").innerText = error_count;
+    document.getElementById("warn_logs_count").innerText = warn_count;
+    document.getElementById("debug_logs_count").innerText = debug_count;
+
     if (!logs || !logs?.length || total_logs === 0) {
         return;
     }
@@ -129,12 +134,6 @@ function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug
 
     document.getElementById("prevBtn").disabled = currentPage <= 1;
     document.getElementById("nextBtn").disabled = currentPage >= totalPages;
-
-    document.getElementById("total_logs_count").innerText = total_logs;
-    document.getElementById("info_logs_count").innerText = info_count;
-    document.getElementById("error_logs_count").innerText = error_count;
-    document.getElementById("warn_logs_count").innerText = warn_count;
-    document.getElementById("debug_logs_count").innerText = debug_count;
 
 }
 

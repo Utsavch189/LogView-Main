@@ -4,53 +4,71 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
-
-	"context"
+	"strings"
 
 	"github.com/Utsavch189/logview/internal/configs"
 	"github.com/Utsavch189/logview/internal/controller"
 	"github.com/Utsavch189/logview/internal/models/request"
 	"github.com/Utsavch189/logview/internal/models/response"
 	"github.com/Utsavch189/logview/internal/utils"
-	"github.com/go-redis/redis/v8"
 	"github.com/gorilla/mux"
 )
 
-var ctx = context.Background()
-var rdb *redis.Client
-
 func LogIngestService(w http.ResponseWriter, r *http.Request) {
+
+	var logDatas []request.LogEntry
+
+	err := json.NewDecoder(r.Body).Decode(&logDatas)
+
 	w.Header().Set("Content-Type", "application/json")
 
-	rdb = redis.NewClient(&redis.Options{
-		Addr:     configs.GetEnv("REDIS_ADDR"),
-		Password: "",
-		DB:       0,
-	})
-
-	logData := &request.LogEntry{}
-
-	err := json.NewDecoder(r.Body).Decode(&logData)
 	if err != nil {
-		http.Error(w, "Invalid log format", http.StatusBadRequest)
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(response.ErrorResponse(err, "Invalid log format!"))
 		return
 	}
 
-	_, perr := controller.GetProjectBySourceToken(logData.SourceToken)
+	// fmt.Printf("logDatas[0]: %+v\n", logDatas[0])
 
+	authHeader := r.Header.Get("Authorization")
+	if !strings.HasPrefix(authHeader, "Bearer ") {
+		http.Error(w, "Missing or invalid Authorization header", http.StatusUnauthorized)
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	_, perr := controller.GetProjectBySourceToken(token)
 	if perr != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(response.ErrorResponse(perr, "log is denied!"))
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(response.ErrorResponse(perr, "Unauthorized"))
 		return
 	}
 
-	jsonLog, _ := json.Marshal(logData)
-	// print(logData.Exception)
-	rdb.RPush(ctx, "logs", jsonLog)
+	for i := range logDatas {
+		logData := &logDatas[i]
+		jsonLog, err := json.Marshal(logData)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"message": "Failed to marshal log entry",
+			})
+			return
+		}
+
+		err = configs.Rdb.RPush(configs.Ctx, "logs", jsonLog).Err()
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			json.NewEncoder(w).Encode(map[string]string{
+				"message": "Failed to store log entry in Redis",
+			})
+			return
+		}
+	}
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{
-		"message": "Log is published",
+		"message": "Logs have been successfully ingested",
 	})
 }
 
