@@ -13,6 +13,8 @@ let dates = {
 let currentPage = 1;
 const itemsPerPage = 20;
 
+const delete_proj_conf_modal_btn = document.getElementById("delete-proj-conf-modal-btn");
+
 function openLogModal(log) {
     document.getElementById("logDetails").innerText = JSON.stringify(log, null, 2);
     document.getElementById("logModal").classList.remove("hidden");
@@ -53,8 +55,13 @@ async function getLogs(project_name = "") {
                 "dates": dates
             })
         })
-        const data = await res.json();
-        renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count,data?.paginate_count);
+        if (res.ok) {
+            const data = await res.json();
+            renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count, data?.paginate_count);
+        }
+        else {
+            window.Utils.showToast("Something is wrong!", "error")
+        }
     } catch (error) {
         console.log(error)
         window.Utils.showToast("Something is wrong!", "error")
@@ -71,10 +78,15 @@ async function createProject() {
                     "project_name": name
                 })
             })
-            const data = await res.json();
-            window.Utils.showToast(`Project ${data?.project_name} is created!`, "success");
-            await getProjects();
-            closeLogModal();
+            if (res.ok) {
+                const data = await res.json();
+                closeLogModal();
+                window.Utils.showToast(`Project ${data?.project_name} is created!`, "success");
+                await getProjects();
+            }
+            else {
+                window.Utils.showToast("Something is wrong!", "error")
+            }
         }
         else {
             window.Utils.showToast("Enter a Project Name!", "error");
@@ -92,8 +104,13 @@ async function createProject() {
 async function getProjects() {
     try {
         const res = await fetch("/api/project/get-all")
-        const data = await res.json();
-        renderProjects(data)
+        if (res.ok) {
+            const data = await res.json();
+            renderProjects(data)
+        }
+        else {
+            window.Utils.showToast("Something is wrong!", "error")
+        }
     } catch (error) {
         window.Utils.showToast("Something is wrong!", "error")
     }
@@ -103,11 +120,11 @@ function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug
     const container = document.getElementById("logContainer");
     container.innerHTML = '';
 
-    document.getElementById("total_logs_count").innerText = total_logs;
-    document.getElementById("info_logs_count").innerText = info_count;
-    document.getElementById("error_logs_count").innerText = error_count;
-    document.getElementById("warn_logs_count").innerText = warn_count;
-    document.getElementById("debug_logs_count").innerText = debug_count;
+    document.getElementById("total_logs_count").innerText = total_logs ? total_logs : 0;
+    document.getElementById("info_logs_count").innerText = info_count ? info_count : 0;
+    document.getElementById("error_logs_count").innerText = error_count ? error_count : 0;
+    document.getElementById("warn_logs_count").innerText = warn_count ? warn_count : 0;
+    document.getElementById("debug_logs_count").innerText = debug_count ? debug_count : 0;
 
     if (!logs || !logs?.length || total_logs === 0) {
         return;
@@ -173,6 +190,7 @@ function renderProjects(projects) {
                       class="cursor-pointer px-4 py-3 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
                       onclick="toggleCollapsible(this)"
                     >
+                      <i class="fa-solid fa-trash text-red-500" onclick="deleteLogs('${v?.source_token}','${v?.project_name}')"></i>
                       <span class="font-medium text-gray-800">${v?.project_name}</span>
                       <span class="transform transition-transform">▼</span>
                     </div>
@@ -188,7 +206,7 @@ function renderProjects(projects) {
                           </div>
                         </div>
                         <button 
-                          class="w-full bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
+                          class="w-full bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 transition-colors"
                           onclick="getLogs('${v?.project_name}')"
                         >
                           View Log
@@ -201,6 +219,29 @@ function renderProjects(projects) {
         `
         list.innerHTML += elm;
     })
+}
+
+async function deleteLogs(source_token, project_name) {
+    try {
+        delete_proj_conf_modal_btn.click();
+        const text = `Are you sure you want to delete project ${project_name}?`
+        document.getElementById("delete-proj-modal-text").innerText = text;
+
+        document.getElementById("delete-proj-confirm-btn").addEventListener("click", async (e) => {
+            const res = await fetch(`/api/project/delete/${source_token}`, {
+                method: "DELETE"
+            })
+            if (res.ok) {
+                window.Utils.showToast(`Project ${project_name} is deleted!`, "success");
+                await getProjects();
+            }
+            else {
+                window.Utils.showToast("Something is wrong!", "error");
+            }
+        })
+    } catch (error) {
+        window.Utils.showToast("Something is wrong!", "error");
+    }
 }
 
 function set_checking_loglevels() {
@@ -293,30 +334,40 @@ document.getElementById("resetDateSearch").addEventListener("click", async (e) =
 
 
 document.getElementById("log-download-btn").addEventListener("click", async (e) => {
-    const urlParams = new URLSearchParams(window.location.search);
-    project_name = urlParams.get('project');
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        project_name = urlParams.get('project');
 
-    if (!project_name) {
-        window.Utils.showToast(`No project is selected!`, "error");
-        return;
+        if (!project_name) {
+            window.Utils.showToast(`No project is selected!`, "error");
+            return;
+        }
+
+        const response = await fetch(`/api/logs/${project_name}/download-logs`, {
+            method: "POST",
+            body: JSON.stringify({
+                "loglevels": checkcked_log_levels,
+                "dates": dates
+            })
+        })
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "logs.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        }
+        else {
+            window.Utils.showToast("Something is wrong!", "error");
+        }
+    } catch (error) {
+        window.Utils.showToast("Something is wrong!", "error");
     }
 
-    const response = await fetch(`/api/logs/${project_name}/download-logs`, {
-        method: "POST",
-        body: JSON.stringify({
-            "loglevels": checkcked_log_levels,
-            "dates": dates
-        })
-    })
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "logs.xlsx";
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    window.URL.revokeObjectURL(url);
 })
 
 document.addEventListener("DOMContentLoaded", async () => {

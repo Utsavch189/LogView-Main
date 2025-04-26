@@ -11,4 +11,7 @@ func ProjectHandler(r *mux.Router) {
 
 	r.HandleFunc("/api/project/get-all", service.GetAllProjectSerive).
 		Methods("GET")
+
+	r.HandleFunc("/api/project/delete/{source_token}", service.DeleteProjectService).
+		Methods("DELETE")
 }

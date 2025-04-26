@@ -129,3 +129,39 @@ func GetAllProject() ([]request.ProjectEntry, error) {
 
 	return projects, nil
 }
+
+func DeleteProject(source_token string) error {
+	db, err := configs.Connect()
+
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+
+	query1 := `Delete from projects Where source_token = ?`
+	_, err1 := tx.Exec(query1, source_token)
+
+	if err1 != nil {
+		tx.Rollback()
+		return err1
+	}
+
+	query2 := `Delete from logs Where source_token = ?`
+	_, err2 := tx.Exec(query2, source_token)
+
+	if err2 != nil {
+		tx.Rollback()
+		return err2
+	}
+
+	if err = tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
+}

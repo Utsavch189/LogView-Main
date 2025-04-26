@@ -7,6 +7,7 @@ import (
 	"github.com/Utsavch189/logview/internal/controller"
 	"github.com/Utsavch189/logview/internal/models/request"
 	"github.com/Utsavch189/logview/internal/models/response"
+	"github.com/gorilla/mux"
 )
 
 func CreateProjectService(w http.ResponseWriter, r *http.Request) {
@@ -45,4 +46,24 @@ func GetAllProjectSerive(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(&projects)
+}
+
+func DeleteProjectService(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	params := mux.Vars(r)
+	source_token := params["source_token"]
+
+	err := controller.DeleteProject(source_token)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(response.ErrorResponse(err, "project deletion failed!"))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "deleted",
+	})
 }
