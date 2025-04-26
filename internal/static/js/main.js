@@ -16,7 +16,6 @@ const itemsPerPage = 20;
 const delete_proj_conf_modal_btn = document.getElementById("delete-proj-conf-modal-btn");
 
 function openLogModal(log) {
-    console.log(log)
     document.getElementById("logDetails").innerText = JSON.stringify(log,null,2);
     document.getElementById("logModal").classList.remove("hidden");
 }

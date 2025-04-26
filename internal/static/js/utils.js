@@ -91,7 +91,7 @@
         const BAD = /[&<>"'`\\\n\r]/g;
 
         function sanitize(str) {
-            return str.replace(BAD, "");
+            return str.replace(BAD, "").replace(/ +/g, " ");
         }
 
         function init() {

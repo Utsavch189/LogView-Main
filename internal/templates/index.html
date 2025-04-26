@@ -286,10 +286,10 @@
 
   <!-- Log Modal -->
   <div id="logModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
-    <div class="bg-white rounded-lg shadow-lg max-w-xl w-full p-6 relative">
+    <div class="bg-white min-h-screen rounded-lg shadow-lg max-w-2xl w-full p-6 relative">
       <button onclick="closeLogModal()" class="absolute top-2 right-2 text-gray-500 hover:text-red-500">&times;</button>
       <h2 class="text-xl font-semibold mb-4">Log Details</h2>
-      <pre id="logDetails" class="whitespace-pre-wrap"></pre>
+      <pre id="logDetails" class="whitespace-pre-wrap break-words overflow-x-auto"></pre>
     </div>
   </div>
 
