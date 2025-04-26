@@ -74,9 +74,9 @@
 
         function formatUnixTimestamp(ts) {
             const date = new Date(ts * 1000);
-        
+
             if (date.getFullYear() === 1) return "N/A";
-        
+
             return date.toLocaleString('en-US', {
                 year: 'numeric',
                 month: 'short',
@@ -88,11 +88,18 @@
             });
         }
 
+        const BAD = /[&<>"'`\\\n\r]/g;
+
+        function sanitize(str) {
+            return str.replace(BAD, "");
+        }
+
         function init() {
             window.Utils = {
                 showToast: showToast,
                 dateConvertFromRawGoDates: dateConvertFromRawGoDates,
-                formatUnixTimestamp: formatUnixTimestamp
+                formatUnixTimestamp: formatUnixTimestamp,
+                sanitize: sanitize
             }
         }
         init();

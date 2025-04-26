@@ -154,6 +154,7 @@ func GetFilteredLogs(sql string, sqlCount string, sqlInfoLogCount string, sqlWar
 		}
 
 		log.CreatedAt, _ = time.Parse(time.RFC3339, createdAt)
+		// log.Message = utils.SanitizeLogMessage(log.Message)
 
 		logs = append(logs, log)
 	}

@@ -128,3 +128,11 @@ func GenerateXlLogs(logs []request.LogEntry) *excelize.File {
 
 	return f
 }
+
+func SanitizeLogMessage(msg string) string {
+	msg = strings.ReplaceAll(msg, `"`, `\"`)   // Escape double quotes
+	msg = strings.ReplaceAll(msg, `'`, `\'`)   // Escape single quotes
+	msg = strings.ReplaceAll(msg, "\n", "\\n") // Escape newlines
+	msg = strings.ReplaceAll(msg, "\r", "\\r") // Escape carriage returns
+	return msg
+}

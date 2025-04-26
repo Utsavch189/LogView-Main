@@ -16,7 +16,8 @@ const itemsPerPage = 20;
 const delete_proj_conf_modal_btn = document.getElementById("delete-proj-conf-modal-btn");
 
 function openLogModal(log) {
-    document.getElementById("logDetails").innerText = JSON.stringify(log, null, 2);
+    console.log(log)
+    document.getElementById("logDetails").innerText = JSON.stringify(log,null,2);
     document.getElementById("logModal").classList.remove("hidden");
 }
 
@@ -57,7 +58,11 @@ async function getLogs(project_name = "") {
         })
         if (res.ok) {
             const data = await res.json();
-            renderLogs(data?.logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count, data?.paginate_count);
+            let logs = data?.logs;
+            for(let i =0 ; i<logs?.length; i++){
+                logs[i].message = window.Utils.sanitize(logs[i].message);
+            }
+            renderLogs(logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count, data?.paginate_count);
         }
         else {
             window.Utils.showToast("Something is wrong!", "error")
@@ -140,7 +145,7 @@ function renderLogs(logs, total_logs, info_count, warn_count, error_count, debug
           <td class="px-4 py-2">${log.logger}</td>
           <td class="px-4 py-2">${log.message}</td>
           <td class="px-4 py-2">
-            <button onclick='openLogModal(${JSON.stringify(log)})' class="text-blue-600 hover:underline">View</button>
+            <button onclick='openLogModal(${JSON.stringify(log).replace(/'/g, "\\'")})' class="text-blue-600 hover:underline">View</button>
           </td>
         </tr>
       `).join("");
