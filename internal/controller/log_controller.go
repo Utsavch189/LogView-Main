@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/Utsavch189/logview/internal/configs"
@@ -256,4 +257,42 @@ func GetLogsForDownload(sql string) ([]request.LogEntry, error) {
 	}
 
 	return logs, nil
+}
+
+func DeleteLogs(logDelete request.LogDelete, project request.ProjectEntry) error {
+	db, err := configs.Connect()
+
+	if err != nil {
+		return err
+	}
+
+	endOfDay := logDelete.To.Add(24 * time.Hour).Truncate(24 * time.Hour).Add(-time.Second)
+
+	sql := fmt.Sprintf(`Delete From logs Where source_token = '%s' AND created_at BETWEEN '%s' AND '%s'`, project.SourceToken, logDelete.From.UTC().Format("2006-01-02 15:04:05"), endOfDay.Format("2006-01-02 15:04:05"))
+
+	_, err = db.Exec(sql)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	return nil
+}
+
+func DeleteLogsScheduled(from time.Time, to time.Time) error {
+	db, err := configs.Connect()
+
+	if err != nil {
+		return err
+	}
+
+	sql := fmt.Sprintf(`Delete From logs Where created_at BETWEEN '%s' AND '%s'`, from.UTC().Format("2006-01-02 15:04:05"), to.UTC().Format("2006-01-02 15:04:05"))
+
+	_, err = db.Exec(sql)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	return nil
 }

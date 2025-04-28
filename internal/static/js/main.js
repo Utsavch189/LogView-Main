@@ -194,7 +194,7 @@ function renderProjects(projects) {
                       class="cursor-pointer px-4 py-3 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
                       onclick="toggleCollapsible(this)"
                     >
-                      <i class="fa-solid fa-trash text-red-500" onclick="deleteLogs('${v?.source_token}','${v?.project_name}')"></i>
+                      <i class="fa-solid fa-trash text-red-500" onclick="deleteProject('${v?.source_token}','${v?.project_name}')"></i>
                       <span class="font-medium text-gray-800">${v?.project_name}</span>
                       <span class="transform transition-transform">▼</span>
                     </div>
@@ -225,7 +225,7 @@ function renderProjects(projects) {
     })
 }
 
-async function deleteLogs(source_token, project_name) {
+async function deleteProject(source_token, project_name) {
     try {
         delete_proj_conf_modal_btn.click();
         const text = `Are you sure you want to delete project ${project_name}?`
@@ -237,7 +237,8 @@ async function deleteLogs(source_token, project_name) {
             })
             if (res.ok) {
                 window.Utils.showToast(`Project ${project_name} is deleted!`, "success");
-                await getProjects();
+                window.location.href = "/";
+                // await getProjects();
             }
             else {
                 window.Utils.showToast("Something is wrong!", "error");
@@ -314,6 +315,35 @@ function validateDates() {
     }
 }
 
+function validateDatesForDelete() {
+    const fromDate = document.getElementById('fromDateDelete');
+    const toDate = document.getElementById('toDateDelete');
+    const selectedRange = document.getElementById('selectedRangeDeleted');
+
+    if (fromDate.value && toDate.value) {
+        const from = new Date(fromDate.value);
+        const to = new Date(toDate.value);
+
+        if (from > to) {
+            toDate.value = fromDate.value;
+        }
+
+        // Format dates for display
+        const formatDate = (date) => {
+            return new Intl.DateTimeFormat('en-US', {
+                weekday: 'short',
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            }).format(date);
+        };
+
+        selectedRange.textContent = `${formatDate(from)} - ${formatDate(to)}`;
+    } else {
+        selectedRange.textContent = 'No dates selected';
+    }
+}
+
 document.getElementById("dateSearch").addEventListener("click", async (e) => {
     const fromDate = document.getElementById('fromDate').value;
     const toDate = document.getElementById('toDate').value;
@@ -334,6 +364,11 @@ document.getElementById("resetDateSearch").addEventListener("click", async (e) =
     dates['from'] = null;
     dates['to'] = null;
     await getLogs();
+})
+
+document.getElementById("resetDateDelete").addEventListener("click", async (e) => {
+    document.getElementById('fromDateDelete').value = "";
+    document.getElementById('toDateDelete').value = "";
 })
 
 
@@ -372,6 +407,45 @@ document.getElementById("log-download-btn").addEventListener("click", async (e) 
         window.Utils.showToast("Something is wrong!", "error");
     }
 
+})
+
+document.getElementById("dateDelete").addEventListener("click",async(e)=>{
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        project_name = urlParams.get('project');
+
+        if (!project_name) {
+            window.Utils.showToast(`No project is selected!`, "error");
+            return;
+        }
+        
+        const fromDate = document.getElementById('fromDateDelete').value;
+        const toDate = document.getElementById('toDateDelete').value;
+
+        if (!fromDate || !toDate){
+            window.Utils.showToast(`Dates are not selected!`, "error");
+            return;
+        }
+
+        const response = await fetch(`/api/logs/${project_name}/delete-logs`, {
+            method: "DELETE",
+            body: JSON.stringify({
+                "from_date": new Date(fromDate).toISOString(),
+                "to_date": new Date(toDate).toISOString()
+            })
+        })
+
+        if(!response.ok){
+            window.Utils.showToast("Something is wrong!", "error");
+        }
+        else{
+            window.Utils.showToast("Logs are deleted!", "success");
+            await getLogs();
+        }
+
+    } catch (error) {
+        window.Utils.showToast("Something is wrong!", "error");
+    }
 })
 
 document.addEventListener("DOMContentLoaded", async () => {

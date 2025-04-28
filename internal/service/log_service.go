@@ -178,7 +178,7 @@ func DownloadLogs(w http.ResponseWriter, r *http.Request) {
 
 	if perr != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(response.ErrorResponse(perr, "logs fetching failed!"))
+		json.NewEncoder(w).Encode(response.ErrorResponse(perr, "log fetching failed!"))
 		return
 	}
 
@@ -202,4 +202,41 @@ func DownloadLogs(w http.ResponseWriter, r *http.Request) {
 	if err := f.Write(w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
+}
+
+func DeleteLogsService(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	var logDelete request.LogDelete
+
+	err := json.NewDecoder(r.Body).Decode(&logDelete)
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		json.NewEncoder(w).Encode(response.ErrorResponse(err, "wrong payload!"))
+		return
+	}
+
+	params := mux.Vars(r)
+	project := params["project"]
+
+	_project, perr := controller.GetProjectByName(project)
+
+	if perr != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(response.ErrorResponse(perr, "log fetching failed!"))
+		return
+	}
+
+	err = controller.DeleteLogs(logDelete, *_project)
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(response.ErrorResponse(err, "failure due to delete logs!"))
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": "deleted",
+	})
 }

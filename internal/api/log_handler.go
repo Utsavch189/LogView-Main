@@ -17,4 +17,7 @@ func LogIngestHandler(r *mux.Router) {
 
 	r.HandleFunc("/api/logs/{project}/download-logs", service.DownloadLogs).
 		Methods("POST")
+
+	r.HandleFunc("/api/logs/{project}/delete-logs", service.DeleteLogsService).
+		Methods("DELETE")
 }

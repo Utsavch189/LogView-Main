@@ -39,3 +39,8 @@ type LogFilterSearch struct {
 	LogLevels []LogLevel `json:"loglevels"`
 	LogDates  LogDate    `json:"dates,omitempty"`
 }
+
+type LogDelete struct {
+	From time.Time `json:"from_date"`
+	To   time.Time `json:"to_date"`
+}

@@ -82,6 +82,51 @@
                 class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Reset</button>
             </div>
 
+            <!-- Delete Logs Date Range Start -->
+
+            <div class="grid grid-cols-2 gap-4">
+              <!-- From Date -->
+              <div>
+                <label for="fromDate" class="block text-sm font-medium text-gray-700 mb-1">
+                  From Date
+                </label>
+                <div class="relative">
+                  <input type="date" id="fromDateDelete"
+                    class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                    onchange="validateDatesForDelete()" />
+                </div>
+              </div>
+
+              <!-- To Date -->
+              <div>
+                <label for="toDate" class="block text-sm font-medium text-gray-700 mb-1">
+                  To Date
+                </label>
+                <div class="relative">
+                  <input type="date" id="toDateDelete"
+                    class="block w-full px-4 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-colors"
+                    onchange="validateDatesForDelete()" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Selected Range Display -->
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+              <p class="text-sm text-gray-600">Selected Range:</p>
+              <p id="selectedRangeDeleted" class="text-base font-medium text-gray-800 mt-1">
+                No dates selected
+              </p>
+            </div>
+
+            <div class="flex mt-6 p-4 bg-gray-50 rounded-lg">
+              <button id="dateDelete" type="button"
+                class="text-white bg-red-700 hover:bg-red-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Delete Logs</button>
+              <button id="resetDateDelete" type="button"
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Reset</button>
+            </div>
+
+            <!-- Delete Logs Date Range End -->
+
           </div>
         </div>
 
