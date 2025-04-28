@@ -222,7 +222,7 @@ function renderProjects(projects) {
             </div>
         `
         list.innerHTML += elm;
-    })
+    }); 
 }
 
 async function deleteProject(source_token, project_name) {

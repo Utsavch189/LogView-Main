@@ -1,6 +1,6 @@
 let refreshInterval = 10;
 let refreshTimer;
-let isAutoRefreshEnabled = true;
+let isAutoRefreshEnabled = false;
 const refreshIndicator = document.getElementById('refreshIndicator');
 
 function formatNumber(num) {
@@ -41,19 +41,21 @@ function updateRefreshInterval(value) {
 function refreshCycle() {
     let countdown = refreshInterval;
 
-    function tick() {
-        updateTimer(countdown);
-        countdown--;
+    if (isAutoRefreshEnabled===true){
+        function tick() {
+            updateTimer(countdown);
+            countdown--;
 
-        if (countdown < 0) {
-            countdown = refreshInterval;
-            getLogs();
+            if (countdown < 0) {
+                countdown = refreshInterval;
+                getLogs();
+            }
         }
-    }
 
-    getLogs();
-    tick();
-    refreshTimer = setInterval(tick, 1000);
+        getLogs();
+        tick();
+        refreshTimer = setInterval(tick, 1000);
+    }
 }
 
 refreshCycle();

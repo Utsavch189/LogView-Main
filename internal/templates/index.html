@@ -37,7 +37,7 @@
       <div class="flex  p-4 w-full">
         <!-- Dates range -->
         <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-6">Select Date Range For Log Search :</h2>
+          <h2 class="text-xl font-semibold text-gray-800 mb-6">Select Date Range For Log Search & Delete :</h2>
 
           <div class="space-y-4">
             <!-- Date Inputs Container -->
@@ -77,9 +77,9 @@
 
             <div class="flex mt-6 p-4 bg-gray-50 rounded-lg">
               <button id="dateSearch" type="button"
-                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Search</button>
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800">Search Logs</button>
               <button id="resetDateSearch" type="button"
-                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Reset</button>
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800">Reset</button>
             </div>
 
             <!-- Delete Logs Date Range Start -->
@@ -120,9 +120,9 @@
 
             <div class="flex mt-6 p-4 bg-gray-50 rounded-lg">
               <button id="dateDelete" type="button"
-                class="text-white bg-red-700 hover:bg-red-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Delete Logs</button>
+                class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Delete Logs</button>
               <button id="resetDateDelete" type="button"
-                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">Reset</button>
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Reset</button>
             </div>
 
             <!-- Delete Logs Date Range End -->
@@ -140,7 +140,7 @@
               <div class="flex items-center gap-4">
                 <div>
                   <i id="log-download-btn" data-tooltip-target="log-download" class="fa-solid fa-download cursor-pointer"></i>
-                  <div id="log-download" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-black transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
+                  <div id="log-download" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
                     Download Logs
                     <div class="tooltip-arrow" data-popper-arrow></div>
                   </div> 
@@ -154,7 +154,7 @@
                 <div class="flex items-center gap-2">
                   <label class="text-sm text-gray-600">Auto-refresh:</label>
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="autoRefreshToggle" class="sr-only peer" checked
+                    <input type="checkbox" id="autoRefreshToggle" class="sr-only peer"
                       onchange="toggleAutoRefresh()">
                     <div
                       class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
