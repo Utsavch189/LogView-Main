@@ -43,10 +43,14 @@ func main() {
 	api.LogIngestHandler(r)
 	api.ProjectHandler(r)
 	api.TemplateHandler(r)
+	api.CoreSystemHandler(r)
 
 	staticDir := http.Dir(filepath.Join("internal", "static"))
+	templateDir := http.Dir(filepath.Join("internal", "templates"))
 	fs := http.FileServer(staticDir)
+	tfs := http.FileServer(templateDir)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", fs))
+	r.PathPrefix("/templates/").Handler(http.StripPrefix("/templates/", tfs))
 
 	http.ListenAndServe(":53423", handler)
 

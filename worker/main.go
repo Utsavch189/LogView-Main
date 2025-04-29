@@ -40,7 +40,19 @@ func main() {
 			time.Sleep(duration)
 			fmt.Println("[Cleaner] Running scheduled log cleanup...")
 
-			from := time.Now().Add(-60 * 24 * time.Hour)
+			var daysBefore int = 60
+
+			settings, errs := controller.GetCoreSystemSettings()
+
+			if errs != nil {
+				log.Print("[Error] in fetching system settings")
+			}
+
+			if settings != nil {
+				daysBefore = settings.AutoLogDeleteDays
+			}
+
+			from := time.Now().AddDate(0, 0, -daysBefore)
 			to := time.Now()
 
 			if err := controller.DeleteLogsScheduled(from, to); err != nil {

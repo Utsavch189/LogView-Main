@@ -17,12 +17,34 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <body class="bg-gray-100 min-h-screen">
+  <!-- Nav bar -->
+  <nav class="w-full px-4 h-12 flex items-center justify-between">
+    <div>
+      <!-- <h2 class="text-lg font-semibold">LogView</h2> -->
+    </div>
+    <div>
+      <i data-tooltip-target="core-settings-tooltip" class="fa-solid fa-gear cursor-pointer" id="core-settings"
+        style="font-size: 20px;"></i>
+      <div id="core-settings-tooltip" role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
+        Core System Settings
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
+    </div>
+  </nav>
+<!-- END -->
   <div class="flex">
+
     <!-- Sidebar -->
-    <div class="w-64 bg-white p-4 shadow h-screen overflow-y-auto">
+    <div class="w-64 bg-white p-4 shadow min-h-screen overflow-y-auto">
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-lg font-semibold">Projects</h2>
-        <button onclick="openProjectModal()" class="text-blue-500 hover:text-blue-700">＋</button>
+        <button data-tooltip-target="create-project-tooltip" onclick="openProjectModal()" class="text-blue-500 hover:text-blue-700">＋</button>
+        <div id="create-project-tooltip" role="tooltip"
+        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
+        Create Your Project
+        <div class="tooltip-arrow" data-popper-arrow></div>
+      </div>
       </div>
       <ul id="projectList" class="space-y-2">
 
@@ -77,7 +99,8 @@
 
             <div class="flex mt-6 p-4 bg-gray-50 rounded-lg">
               <button id="dateSearch" type="button"
-                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800">Search Logs</button>
+                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800">Search
+                Logs</button>
               <button id="resetDateSearch" type="button"
                 class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800">Reset</button>
             </div>
@@ -120,7 +143,8 @@
 
             <div class="flex mt-6 p-4 bg-gray-50 rounded-lg">
               <button id="dateDelete" type="button"
-                class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Delete Logs</button>
+                class="text-white bg-red-500 hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Delete
+                Logs</button>
               <button id="resetDateDelete" type="button"
                 class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Reset</button>
             </div>
@@ -139,11 +163,13 @@
             <div class="flex justify-between items-center mb-6">
               <div class="flex items-center gap-4">
                 <div>
-                  <i id="log-download-btn" data-tooltip-target="log-download" class="fa-solid fa-download cursor-pointer"></i>
-                  <div id="log-download" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
+                  <i id="log-download-btn" data-tooltip-target="log-download"
+                    class="fa-solid fa-download cursor-pointer"></i>
+                  <div id="log-download" role="tooltip"
+                    class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
                     Download Logs
                     <div class="tooltip-arrow" data-popper-arrow></div>
-                  </div> 
+                  </div>
 
                 </div>
                 <div class="flex items-center gap-2">
@@ -154,8 +180,7 @@
                 <div class="flex items-center gap-2">
                   <label class="text-sm text-gray-600">Auto-refresh:</label>
                   <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="autoRefreshToggle" class="sr-only peer"
-                      onchange="toggleAutoRefresh()">
+                    <input type="checkbox" id="autoRefreshToggle" class="sr-only peer" onchange="toggleAutoRefresh()">
                     <div
                       class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
                     </div>
@@ -351,39 +376,90 @@
   </div>
 
   <!-- Delete Confirm Modal -->
-  <button id="delete-proj-conf-modal-btn" data-modal-target="delete-proj-conf-modal" data-modal-toggle="delete-proj-conf-modal" class="block hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center" type="button">
+  <button id="delete-proj-conf-modal-btn" data-modal-target="delete-proj-conf-modal"
+    data-modal-toggle="delete-proj-conf-modal"
+    class="block hidden text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+    type="button">
   </button>
-  
-  <div id="delete-proj-conf-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-      <div class="relative p-4 w-full max-w-md max-h-full">
-          <div class="relative bg-white rounded-lg shadow-sm">
-              <button type="button" class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center" data-modal-hide="delete-proj-conf-modal">
-                  <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                  </svg>
-                  <span class="sr-only">Close modal</span>
-              </button>
-              <div class="p-4 md:p-5 text-center">
-                  <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                  </svg>
-                  <h3 class="mb-5 text-lg font-normal text-gray-500" id="delete-proj-modal-text"></h3>
-                  <button id="delete-proj-confirm-btn" data-modal-hide="delete-proj-conf-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
-                      Yes, I'm sure
-                  </button>
-                  <button data-modal-hide="delete-proj-conf-modal" type="button" class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
-                      No, cancel
-                  </button>
-              </div>
-          </div>
+
+  <div id="delete-proj-conf-modal" tabindex="-1"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <div class="relative bg-white rounded-lg shadow-sm">
+        <button type="button"
+          class="absolute top-3 end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+          data-modal-hide="delete-proj-conf-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+        <div class="p-4 md:p-5 text-center">
+          <svg class="mx-auto mb-4 text-gray-400 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="none" viewBox="0 0 20 20">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+          <h3 class="mb-5 text-lg font-normal text-gray-500" id="delete-proj-modal-text"></h3>
+          <button id="delete-proj-confirm-btn" data-modal-hide="delete-proj-conf-modal" type="button"
+            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+            Yes, I'm sure
+          </button>
+          <button data-modal-hide="delete-proj-conf-modal" type="button"
+            class="py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100">
+            No, cancel
+          </button>
+        </div>
       </div>
+    </div>
   </div>
-  
+
   <!-- END -->
+
+  <!-- Setting Modal -->
+  <button id="core-system-modal-open" data-modal-target="core-system-modal" data-modal-toggle="core-system-modal"
+    class="block hidden  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+    type="button">
+    Toggle modal
+  </button>
+
+  <!-- Main modal -->
+  <div id="core-system-modal" tabindex="-1" aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="relative p-4 w-full max-w-md max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow-sm">
+        <!-- Modal header -->
+        <div class="flex items-center justify-between p-4 md:p-5 border-b border-gray-200 rounded-t">
+          <h3 class="text-lg font-semibold text-gray-900">
+            Core Settings
+          </h3>
+          <button type="button"
+            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+            data-modal-toggle="core-system-modal">
+            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            </svg>
+            <span class="sr-only">Close modal</span>
+          </button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="p-4 md:p-5" id="system-modal-body"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- END -->
+
   <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
   <script src="/static/js/main.js"></script>
   <script src="/static/js/auto_refresh.js"></script>
-  
+  <script src="/static/js/system_modal.js"></script>
+
 </body>
 
 </html>

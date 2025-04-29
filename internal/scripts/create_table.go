@@ -35,6 +35,10 @@ func CreateTables(db *sql.DB) error {
     	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	);
 
+	CREATE TABLE IF NOT EXISTS core_settings (
+    	autolog_delete_days INTEGER DEFAULT 60
+	);
+
     `
 
 	_, err := db.Exec(schema)
