@@ -4,6 +4,29 @@ services:
   redis:
     image: redis:alpine
     container_name: redis
+    networks:
+      - internal_net
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: logview2025
+      MYSQL_DATABASE: logview
+      MYSQL_USER: logview
+      MYSQL_PASSWORD: logviewpass2025
+    ports:
+      - "13306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - internal_net
 
   log-server:
     build:
@@ -12,14 +35,23 @@ services:
     environment:
       - REDIS_ADDR=redis:6379
       - ENVIRON=docker
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=logview
+      - DB_PASSWORD=logviewpass2025
+      - DB_SCHEMA=logview
     ports:
       - "53423:53423"
     depends_on:
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
     volumes:
-      - ./logview_data:/app/logview_data
       - ./internal/templates:/app/internal/templates
       - ./internal/static:/app/internal/static
+    networks:
+      - internal_net
 
   log-worker:
     build:
@@ -28,7 +60,22 @@ services:
     environment:
       - REDIS_ADDR=redis:6379
       - ENVIRON=docker
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=logview
+      - DB_PASSWORD=logviewpass2025
+      - DB_SCHEMA=logview
     depends_on:
-      - redis
-    volumes:
-      - ./logview_data:/app/logview_data
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - internal_net
+
+volumes:
+  mysql_data:
+
+networks:
+  internal_net:
+    driver: bridge

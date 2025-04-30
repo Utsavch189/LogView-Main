@@ -2,7 +2,7 @@
 FROM golang:1.23-alpine AS builder
 
 # Install build dependencies
-RUN apk add --no-cache build-base sqlite-dev
+RUN apk add --no-cache build-base
 
 WORKDIR /app
 
@@ -15,7 +15,6 @@ COPY . .
 
 COPY ./internal/templates /app/internal/templates
 COPY ./internal/static /app/internal/static
-RUN mkdir -p logview_data
 
 # Set CGO_ENABLED=1 for SQLite support and build the binary
 ENV CGO_ENABLED=1
@@ -25,7 +24,7 @@ RUN go build -o log-server ./cmd/server
 FROM alpine:latest
 
 # Install runtime dependencies
-RUN apk add --no-cache sqlite-libs ca-certificates
+RUN apk add --no-cache ca-certificates
 
 WORKDIR /app
 

@@ -2,7 +2,7 @@
 FROM golang:1.23-alpine AS builder
 
 # Install build dependencies
-RUN apk add --no-cache build-base sqlite-dev
+RUN apk add --no-cache build-base
 
 WORKDIR /app
 
@@ -22,7 +22,7 @@ RUN go build -o log-worker ./worker
 FROM alpine:latest
 
 # Install runtime dependencies
-RUN apk add --no-cache sqlite-libs ca-certificates
+RUN apk add --no-cache ca-certificates
 
 WORKDIR /app
 

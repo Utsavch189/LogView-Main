@@ -11,7 +11,7 @@
 
 ## Things to remember : 
 1. LogView depends on redis as message broker . In case of docker all things will be containerized automatically.
-2. LogView used local sqllite3 database to manage data. Before run on docker you can update docker-compose.yml with - ./your_local_system_any_path:/app/logview_data
+2. LogView used mysql database to manage data. For docker build all things will be installed.
 
 ### Some Snaps : 
 <img src="./readme_snaps/one.png" alt="Screenshot1" width="500"/>

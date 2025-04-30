@@ -60,6 +60,9 @@ async function getLogs(project_name = "") {
             let logs = data?.logs;
             for(let i =0 ; i<logs?.length; i++){
                 logs[i].message = window.Utils.sanitize(logs[i].message);
+                if(logs[i]?.exception){
+                    logs[i].exception = window.Utils.sanitize(logs[i].exception);
+                }
             }
             renderLogs(logs, data?.count, data?.info_count, data?.warn_count, data?.error_count, data?.debug_count, data?.paginate_count);
         }
