@@ -23,7 +23,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("DB connect issue: %v", err)
 	}
-	defer db.Close()
 
 	err = scripts.CreateTables(db)
 	if err != nil {

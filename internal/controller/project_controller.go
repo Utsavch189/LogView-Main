@@ -15,7 +15,6 @@ func CreateProject(project *request.ProjectEntry) (*request.ProjectEntry, error)
 	if err != nil {
 		return &request.ProjectEntry{}, err
 	}
-	defer db.Close()
 
 	query := `Insert into projects(source_token,project_name,created_at) Values(?,?,?)`
 
@@ -36,7 +35,6 @@ func GetProjectBySourceToken(source_token string) (*request.ProjectEntry, error)
 	if err != nil {
 		return &project, err
 	}
-	defer db.Close()
 
 	query := `Select * from projects Where source_token = ?`
 	row := db.QueryRow(query, source_token)
@@ -67,7 +65,6 @@ func GetProjectByName(project_name string) (*request.ProjectEntry, error) {
 	if err != nil {
 		return &project, err
 	}
-	defer db.Close()
 
 	query := `Select * from projects Where project_name = ?`
 	row := db.QueryRow(query, project_name)
@@ -98,7 +95,6 @@ func GetAllProject() ([]request.ProjectEntry, error) {
 	if err != nil {
 		return projects, err
 	}
-	defer db.Close()
 
 	query := `Select * from projects order by created_at;`
 	rows, rerr := db.Query(query)
@@ -132,35 +128,41 @@ func GetAllProject() ([]request.ProjectEntry, error) {
 
 func DeleteProject(source_token string) error {
 	db, err := configs.Connect()
-
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to connect to database: %v", err)
 	}
-	defer db.Close()
 
+	// Start a transaction
 	tx, err := db.Begin()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to begin transaction: %v", err)
 	}
 
-	query1 := `Delete from projects Where source_token = ?`
-	_, err1 := tx.Exec(query1, source_token)
+	// Ensure the transaction is rolled back if the function exits early
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
 
-	if err1 != nil {
-		tx.Rollback()
-		return err1
+	// Delete the project
+	query1 := `DELETE FROM projects WHERE source_token = ?`
+	_, err = tx.Exec(query1, source_token)
+	if err != nil {
+		return fmt.Errorf("failed to delete project: %v", err)
 	}
 
-	query2 := `Delete from logs Where source_token = ?`
-	_, err2 := tx.Exec(query2, source_token)
-
-	if err2 != nil {
-		tx.Rollback()
-		return err2
+	// Delete the logs associated with the project
+	query2 := `DELETE FROM logs WHERE source_token = ?`
+	_, err = tx.Exec(query2, source_token)
+	if err != nil {
+		return fmt.Errorf("failed to delete logs: %v", err)
 	}
 
-	if err = tx.Commit(); err != nil {
-		return err
+	// Commit the transaction if everything is successful
+	err = tx.Commit()
+	if err != nil {
+		return fmt.Errorf("failed to commit transaction: %v", err)
 	}
 
 	return nil

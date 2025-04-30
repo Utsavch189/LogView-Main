@@ -15,7 +15,6 @@ func GetCoreSystemSettings() (*request.CoreSettings, error) {
 	if err != nil {
 		return &settings, err
 	}
-	defer db.Close()
 
 	query := `Select * from core_settings`
 	row := db.QueryRow(query)
@@ -41,7 +40,6 @@ func UpdateCoreSettings(settings *request.CoreSettings) error {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 
 	_settings, errs := GetCoreSystemSettings()
 

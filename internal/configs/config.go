@@ -43,7 +43,15 @@ func GetEnv(key string, fallback ...string) string {
 
 // MySQL connection
 
+var db *sql.DB
+
 func Connect() (*sql.DB, error) {
+	// If the db connection is already established, reuse it
+	if db != nil {
+		return db, nil
+	}
+
+	// Build the Data Source Name (DSN) from environment variables
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
 		GetEnv("DB_USER"),
 		GetEnv("DB_PASSWORD"),
@@ -52,26 +60,26 @@ func Connect() (*sql.DB, error) {
 		GetEnv("DB_SCHEMA"),
 	)
 
-	var db *sql.DB
+	// Open a new database connection
 	var err error
-
-	for i := 0; i < 10; i++ {
-		db, err = sql.Open("mysql", dsn)
-		if err != nil {
-			log.Printf("DB open error (try %d): %v", i+1, err)
-			time.Sleep(2 * time.Second)
-			continue
-		}
-
-		err = db.Ping()
-		if err == nil {
-			log.Println("Connected to DB successfully!")
-			return db, nil
-		}
-
-		log.Printf("DB ping error (try %d): %v", i+1, err)
-		time.Sleep(2 * time.Second)
+	db, err = sql.Open("mysql", dsn)
+	if err != nil {
+		log.Printf("DB open error: %v", err)
+		return nil, err
 	}
 
-	return nil, fmt.Errorf("DB connect issue after retries: %v", err)
+	// Set connection pool parameters
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(5)
+	db.SetConnMaxLifetime(30 * time.Minute)
+
+	// Check if the DB is reachable by pinging it
+	err = db.Ping()
+	if err != nil {
+		log.Printf("DB ping error: %v", err)
+		return nil, err
+	}
+
+	log.Println("Connected to DB successfully!")
+	return db, nil
 }

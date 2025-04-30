@@ -14,7 +14,6 @@ func SaveLogToDB(log *request.LogEntry) error {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 
 	query := `
 	INSERT INTO logs (
@@ -274,7 +273,6 @@ func DeleteLogs(logDelete request.LogDelete, project request.ProjectEntry) error
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 
 	return nil
 }
@@ -292,7 +290,6 @@ func DeleteLogsScheduled(from time.Time, to time.Time) error {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
 
 	return nil
 }
