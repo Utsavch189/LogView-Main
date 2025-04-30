@@ -28,7 +28,7 @@ func main() {
 			now := time.Now()
 
 			// Set next 4 AM
-			next := time.Date(now.Year(), now.Month(), now.Day(), 21, 41, 0, 0, now.Location())
+			next := time.Date(now.Year(), now.Month(), now.Day(), 4, 0, 0, 0, now.Location())
 			if now.After(next) {
 				// Already past today's 4 AM, schedule for tomorrow
 				next = next.Add(24 * time.Hour)
