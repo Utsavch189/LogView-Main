@@ -284,8 +284,11 @@ func DeleteLogsScheduled(from time.Time, to time.Time) error {
 		return err
 	}
 
-	sql := fmt.Sprintf(`Delete From logs Where created_at BETWEEN '%s' AND '%s'`, from.UTC().Format("2006-01-02 15:04:05"), to.UTC().Format("2006-01-02 15:04:05"))
+	from = time.Date(from.Year(), from.Month(), from.Day(), 0, 0, 0, 0, time.UTC)
+	to = time.Date(to.Year(), to.Month(), to.Day(), 23, 59, 59, 0, time.UTC)
 
+	sql := fmt.Sprintf(`Delete From logs Where created_at BETWEEN '%s' AND '%s'`, from.UTC().Format("2006-01-02 15:04:05"), to.UTC().Format("2006-01-02 15:04:05"))
+	print(sql)
 	_, err = db.Exec(sql)
 	if err != nil {
 		return err
