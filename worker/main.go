@@ -73,15 +73,19 @@ func main() {
 			continue
 		} else if err != nil {
 			log.Println("Redis error:", err)
+			time.Sleep(100 * time.Millisecond)
 			continue
 		}
+
+		// fmt.Printf("Received from Redis: %s\n", result)
 
 		if err := json.Unmarshal([]byte(result), logEntry); err != nil {
 			log.Println("JSON unmarshal error:", err)
 			continue
 		}
+		// fmt.Printf("After unmarshal: %+v\n", logEntry)
 
-		fmt.Printf("[LOG][%s] %s - %s - %s\n", logEntry.Level, logEntry.Logger, logEntry.Message, logEntry.Exception)
+		fmt.Printf("[LOG][%s] %s - %s - %s\n", logEntry.Level, logEntry.Logger, logEntry.Message, logEntry.SourceToken)
 
 		if err := controller.SaveLogToDB(logEntry); err != nil {
 			log.Println("DB insert error:", err)

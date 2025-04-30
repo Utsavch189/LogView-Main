@@ -12,13 +12,17 @@ import (
 	"github.com/Utsavch189/logview/internal/models/response"
 	"github.com/Utsavch189/logview/internal/utils"
 	"github.com/gorilla/mux"
+	"github.com/vmihailenco/msgpack/v5"
 )
 
 func LogIngestService(w http.ResponseWriter, r *http.Request) {
 
-	var logDatas []request.LogEntry
+	decoder := msgpack.NewDecoder(r.Body)
+	// print(decoder)
 
-	err := json.NewDecoder(r.Body).Decode(&logDatas)
+	var logDatas []request.LogEntryMsgPack
+
+	err := decoder.Decode(&logDatas)
 
 	w.Header().Set("Content-Type", "application/json")
 
@@ -27,7 +31,7 @@ func LogIngestService(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response.ErrorResponse(err, "Invalid log format!"))
 		return
 	}
-
+	// fmt.Printf("Decoded logDatas: %+v\n", logDatas)
 	// fmt.Printf("logDatas[0]: %+v\n", logDatas[0])
 
 	authHeader := r.Header.Get("Authorization")
@@ -48,6 +52,7 @@ func LogIngestService(w http.ResponseWriter, r *http.Request) {
 	for i := range logDatas {
 		logData := &logDatas[i]
 		jsonLog, err := json.Marshal(logData)
+		// fmt.Printf("JSON Data: %s\n", jsonLog)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]string{

@@ -24,6 +24,28 @@ type LogEntry struct {
 	CreatedAt time.Time `json:"created_at,omitempty"` // mapped to SQLite TIMESTAMP
 }
 
+type LogEntryMsgPack struct {
+	ID           int    `msgpack:"id,omitempty"`
+	Time         string `msgpack:"time"`
+	Level        string `msgpack:"level"`
+	Logger       string `msgpack:"logger"`
+	Message      string `msgpack:"message"`
+	Hostname     string `msgpack:"hostname"`
+	Source_Token string `msgpack:"source_token"`
+
+	Pathname  string  `msgpack:"pathname"`
+	Filename  string  `msgpack:"filename"`
+	Func_Name string  `msgpack:"func_name"`
+	Lineno    int     `msgpack:"lineno"`
+	Thread    string  `msgpack:"thread"`
+	Process   string  `msgpack:"process"`
+	Module    string  `msgpack:"module"`
+	Created   float64 `msgpack:"created"` // float64 to match SQLite REAL
+
+	Exception string    `msgpack:"exception,omitempty"`  // optional stack trace
+	CreatedAt time.Time `msgpack:"created_at,omitempty"` // mapped to SQLite TIMESTAMP
+}
+
 type LogLevel struct {
 	Level   string `json:"level"`
 	ID      string `json:"id"`
