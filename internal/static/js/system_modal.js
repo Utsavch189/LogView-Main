@@ -6,7 +6,7 @@ async function getSystemCoreSettings() {
         const res = await fetch(`/api/core/settings`)
         const data = await res.json();
         if(res.ok){
-            window.Utils.showToast("Core settings are fetched!", "info");
+            // window.Utils.showToast("Core settings are fetched!", "info");
             renderModal(data);
         }
         else{

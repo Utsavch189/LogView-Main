@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/Utsavch189/logview/internal/configs"
@@ -42,6 +43,57 @@ func SaveLogToDB(log *request.LogEntry) error {
 
 	if err1 != nil {
 		return err1
+	}
+
+	return nil
+}
+
+func SaveLogsBulkToDB(logs []*request.LogEntry) error {
+	db, err := configs.Connect()
+	if err != nil {
+		return err
+	}
+
+	if len(logs) == 0 {
+		return nil
+	}
+
+	query := `
+	INSERT INTO logs (
+		time, level, logger, message, hostname, source_token,
+		pathname, filename, func_name, lineno, thread,
+		process, module, created, exception
+	) VALUES `
+
+	valueStrings := make([]string, 0, len(logs))
+	valueArgs := make([]interface{}, 0, len(logs)*15)
+
+	for _, log := range logs {
+		valueStrings = append(valueStrings, "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+		valueArgs = append(valueArgs,
+			log.Time,
+			log.Level,
+			log.Logger,
+			log.Message,
+			log.Hostname,
+			log.SourceToken,
+			log.Pathname,
+			log.Filename,
+			log.FuncName,
+			log.Lineno,
+			log.Thread,
+			log.Process,
+			log.Module,
+			log.Created,
+			log.Exception,
+		)
+	}
+
+	query += strings.Join(valueStrings, ",")
+
+	_, err = db.Exec(query, valueArgs...)
+	if err != nil {
+		return err
 	}
 
 	return nil

@@ -22,7 +22,7 @@ func main() {
 		DB:       0,
 	})
 
-	// Goroutine to delete 2 months before log
+	// Goroutine to delete logs in scheduler
 	go func() {
 		for {
 			now := time.Now()
@@ -65,7 +65,7 @@ func main() {
 
 	// Normal worker to save logs in db
 	for {
-		logEntry := &request.LogEntry{}
+		logEntrys := []*request.LogEntry{}
 		result, err := rdb.LPop(wrokerctx, "logs").Result()
 
 		if err == redis.Nil {
@@ -79,18 +79,14 @@ func main() {
 
 		// fmt.Printf("Received from Redis: %s\n", result)
 
-		if err := json.Unmarshal([]byte(result), logEntry); err != nil {
+		if err := json.Unmarshal([]byte(result), &logEntrys); err != nil {
 			log.Println("JSON unmarshal error:", err)
 			continue
 		}
-		// fmt.Printf("After unmarshal: %+v\n", logEntry)
 
-		fmt.Printf("[LOG][%s] %s - %s - %s\n", logEntry.Level, logEntry.Logger, logEntry.Message, logEntry.SourceToken)
-
-		if err := controller.SaveLogToDB(logEntry); err != nil {
+		if err := controller.SaveLogsBulkToDB(logEntrys); err != nil {
 			log.Println("DB insert error:", err)
-		} else {
-			println("Db insert complete")
+			continue
 		}
 	}
 }

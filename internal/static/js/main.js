@@ -197,9 +197,19 @@ function renderProjects(projects) {
                       class="cursor-pointer px-4 py-3 flex items-center justify-between bg-white hover:bg-gray-50 transition-colors"
                       onclick="toggleCollapsible(this)"
                     >
-                      <i class="fa-solid fa-trash text-red-500" onclick="deleteProject('${v?.source_token}','${v?.project_name}')"></i>
+                      <div id="delete-project-tooltip" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
+                        Delete Project
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                      </div>
+                      <i data-tooltip-target="delete-project-tooltip" class="fa-solid fa-trash text-red-500" onclick="deleteProject('${v?.source_token}','${v?.project_name}')"></i>
                       <span class="font-medium text-gray-800">${v?.project_name}</span>
-                      <span class="transform transition-transform">▼</span>
+                      <span data-tooltip-target="view-project-tooltip" class="transform transition-transform">▼</span>
+                      <div id="view-project-tooltip" role="tooltip"
+                        class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip">
+                        View Project
+                        <div class="tooltip-arrow" data-popper-arrow></div>
+                      </div>
                     </div>
 
                     <div class="hidden px-4 py-3 border-t border-gray-200">

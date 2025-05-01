@@ -18,7 +18,6 @@ import (
 func LogIngestService(w http.ResponseWriter, r *http.Request) {
 
 	decoder := msgpack.NewDecoder(r.Body)
-	// print(decoder)
 
 	var logDatas []request.LogEntryMsgPack
 
@@ -31,8 +30,6 @@ func LogIngestService(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(response.ErrorResponse(err, "Invalid log format!"))
 		return
 	}
-	// fmt.Printf("Decoded logDatas: %+v\n", logDatas)
-	// fmt.Printf("logDatas[0]: %+v\n", logDatas[0])
 
 	authHeader := r.Header.Get("Authorization")
 	if !strings.HasPrefix(authHeader, "Bearer ") {
@@ -49,26 +46,23 @@ func LogIngestService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for i := range logDatas {
-		logData := &logDatas[i]
-		jsonLog, err := json.Marshal(logData)
-		// fmt.Printf("JSON Data: %s\n", jsonLog)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(map[string]string{
-				"message": "Failed to marshal log entry",
-			})
-			return
-		}
+	jsonLog, err := json.Marshal(logDatas)
 
-		err = configs.Rdb.RPush(configs.Ctx, "logs", jsonLog).Err()
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			json.NewEncoder(w).Encode(map[string]string{
-				"message": "Failed to store log entry in Redis",
-			})
-			return
-		}
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Failed to marshal log entry",
+		})
+		return
+	}
+
+	err = configs.Rdb.RPush(configs.Ctx, "logs", jsonLog).Err()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{
+			"message": "Failed to store log entry in Redis",
+		})
+		return
 	}
 
 	w.WriteHeader(http.StatusCreated)
