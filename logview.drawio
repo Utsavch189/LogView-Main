@@ -1,0 +1,130 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36" version="26.1.1">
+  <diagram name="Page-1" id="BnrZGniS7Km_DD5yxI_l">
+    <mxGraphModel dx="1444" dy="742" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-1" value="" style="endArrow=classic;html=1;rounded=0;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="160" y="260" as="sourcePoint" />
+            <mxPoint x="290" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-3" value="MySQL" style="shape=image;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;verticalLabelPosition=bottom;verticalAlign=top;strokeColor=none;fillColor=#00BEF2;labelBackgroundColor=default;aspect=fixed;points=[];image=img/lib/azure2/databases/Azure_Database_MySQL_Server.svg;" vertex="1" parent="1">
+          <mxGeometry x="757" y="800" width="60" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-4" target="FGdZeOJrfpiQstXYFYVx-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-4" value="Go server" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="290" y="220" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-5" target="FGdZeOJrfpiQstXYFYVx-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-5" value="deserialize&lt;br&gt;log data" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="414" y="223" width="74" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;exitX=0.972;exitY=0.46;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-39" target="FGdZeOJrfpiQstXYFYVx-15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="510" y="470" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-9" value="convert log&amp;nbsp;&lt;div&gt;data into&lt;/div&gt;&lt;div&gt;json&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="510" y="226" width="74" height="74" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-9" target="FGdZeOJrfpiQstXYFYVx-39">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="450" y="470" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-12" target="FGdZeOJrfpiQstXYFYVx-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-12" value="Go Wrorker" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="710" y="200" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-13">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1041" y="880" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-13" value="goroutine&lt;br&gt;for schedule&lt;br&gt;log deletion" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="780" y="340" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-15" target="FGdZeOJrfpiQstXYFYVx-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-15" value="goroutine&lt;br&gt;for reading the&lt;div&gt;redis to get&lt;/div&gt;&lt;div&gt;new logs&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="640" y="335" width="90" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.617;entryY=0.038;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-12" target="FGdZeOJrfpiQstXYFYVx-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-18" target="FGdZeOJrfpiQstXYFYVx-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-18" target="FGdZeOJrfpiQstXYFYVx-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-18" target="FGdZeOJrfpiQstXYFYVx-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-18" value="channel&amp;nbsp;&lt;br&gt;to store new read logs" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="530" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-20" value="Wroker 1&lt;div&gt;Receive logs&amp;nbsp;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="645" y="650" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-22" value="Wroker 2&lt;div&gt;Receive logs&amp;nbsp;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="747" y="650" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-24" value="Wroker 3&lt;div&gt;Receive logs&amp;nbsp;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="850" y="650" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-26" target="FGdZeOJrfpiQstXYFYVx-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-26" value="convert json&lt;br&gt;into go object" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="740" y="430" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0;entryDx=0;entryDy=52.5;entryPerimeter=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-20" target="FGdZeOJrfpiQstXYFYVx-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-22" target="FGdZeOJrfpiQstXYFYVx-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="FGdZeOJrfpiQstXYFYVx-24" target="FGdZeOJrfpiQstXYFYVx-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-32" value="bulk log insert in db" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="730" y="758" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-33" value="bulk log insert in db" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="530" y="758" width="130" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-34" value="/api/logs/ingest" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="170" y="226" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-36" value="" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="FGdZeOJrfpiQstXYFYVx-3">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1040" y="880" as="sourcePoint" />
+            <mxPoint x="690" y="760" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-37" value="schedule log deletion" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="890" y="850" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-38" value="&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;binary serialized log&amp;nbsp;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;text-wrap-mode: nowrap;&quot;&gt;data arrays&lt;/span&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="220" width="120" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-39" value="" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Cache_Redis_Product.svg;" vertex="1" parent="1">
+          <mxGeometry x="425" y="449" width="50" height="42" as="geometry" />
+        </mxCell>
+        <mxCell id="FGdZeOJrfpiQstXYFYVx-40" value="Redis" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="426" y="491" width="50" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

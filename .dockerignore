@@ -5,3 +5,4 @@
 .env
 readme_snaps
 /readme_snaps
+*.drawio
