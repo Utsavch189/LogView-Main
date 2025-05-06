@@ -1,5 +1,8 @@
 # LogView is a local log manager for your application [continuously updating]
 
+## System Architecture : 
+<img src="./readme_snaps/logview.drawio.png" alt="Screenshot5" width="500"/>
+
 ## How to run :
 ### 1. Run without docker
 1. make run-server
@@ -12,6 +15,9 @@
 ## Things to remember : 
 1. LogView depends on redis as message broker . In case of docker all things will be containerized automatically.
 2. LogView used mysql database to manage data. For docker build all things will be installed.
+
+## Clients : 
+1. <a href="https://pypi.org/project/logview-core/">Python Client</a>
 
 ### Some Snaps : 
 <img src="./readme_snaps/one.png" alt="Screenshot1" width="500"/>
